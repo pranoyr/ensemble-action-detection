@@ -79,8 +79,8 @@ class Stanford40:
 		mask = np.array(mask)
 		self.ids = np.array(self.ids)
 		self.ids = self.ids[mask]
-		print(self.ids)
-
+	
+	
 	def __parse_annotation(self, element):
 		""" Parse an annotation given an XML element.
 		"""
