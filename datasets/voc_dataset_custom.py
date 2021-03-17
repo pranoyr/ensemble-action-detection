@@ -127,6 +127,7 @@ class Stanford40:
 
 	def __getitem__(self, index):
 		image_id = self.ids[index]
+		print(image_id)
 		image = self._read_image(image_id)
 		box, label = self._get_annotation(image_id)
 		print(label)
