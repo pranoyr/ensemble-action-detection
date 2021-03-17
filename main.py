@@ -92,8 +92,8 @@ def main():
 	# start training
 	for epoch in range(opt.start_epoch, opt.epochs+1):
 		# train, test model
-		train_loss, train_mAP = train_epoch(model, train_loader, criterion, optimizer, epoch, device, opt)
-		val_loss, val_mAP = val_epoch(model, val_loader, criterion, device, opt)
+		train_loss, train_acc = train_epoch(model, train_loader, criterion, optimizer, epoch, device, opt)
+		val_loss, val_acc = val_epoch(model, val_loader, criterion, device, opt)
 		scheduler.step(val_loss)
 
 		lr = optimizer.param_groups[0]['lr']  
@@ -106,9 +106,9 @@ def main():
 			summary_writer.add_scalar(
 				'losses/val_loss', val_loss, global_step=epoch)
 			summary_writer.add_scalar(
-				'acc/train_mAP', train_mAP, global_step=epoch)
+				'acc/train_acc', train_acc, global_step=epoch)
 			summary_writer.add_scalar(
-				'acc/val_mAP', val_mAP, global_step=epoch)
+				'acc/val_acc', val_acc, global_step=epoch)
 			summary_writer.add_scalar(
 				'lr_rate', lr, global_step=epoch)
 

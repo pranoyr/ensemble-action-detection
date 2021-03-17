@@ -11,31 +11,31 @@ import tensorboardX
 import os
 import random
 import numpy as np
-from utils.util import AverageMeter, Metric
+from utils.util import AverageMeter, accuracy
+
 
 
 def val_epoch(model, data_loader, criterion, device, opt):
 
-    model.eval()
+	model.eval()
 
-    metric = Metric(opt.num_classes)
-    losses = AverageMeter()
-    with torch.no_grad():
-        for (data, targets) in data_loader:
-            # compute output
-            data, targets = data.to(device), targets.to(device)
-            outputs =  model(data)
+	losses = AverageMeter('Loss', ':.4e')
+	accuracies = AverageMeter('Acc@1', ':6.2f')
+	with torch.no_grad():
+		for (data, targets) in data_loader:
+			# compute output
+			data, targets = data.to(device), targets.to(device)
+			outputs =  model(data)
 
-            # compute loss
-            loss = criterion(outputs, targets)
+			# compute loss
+			loss = criterion(outputs, targets)
+			acc = accuracy(outputs, targets)
 
-            losses.update(loss.item(), data.size(0))
-            outputs = torch.sigmoid(outputs)
-            metric.update(outputs, targets)
+			losses.update(loss.item(), data.size(0))
+			accuracies.update(acc[0],  data.size(0))
 
-    # show information
-    mAP = metric.compute_metrics()
-    print('Validation set ({:d} samples): Average loss: {:.4f}\tmAP: {:.4f}'.format(losses.count, losses.avg, mAP))
-    return losses.avg, mAP
+	# show information
+	print(f' * Loss {losses.avg:.3f}, Accuracy {accuracies.avg:.3f}')
+	return losses.avg, accuracies.avg
 
-    
+	
