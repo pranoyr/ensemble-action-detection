@@ -129,6 +129,7 @@ class Stanford40:
 		image_id = self.ids[index]
 		image = self._read_image(image_id)
 		box, label = self._get_annotation(image_id)
+		print(label)
 		label = label[0]
 		box = box[0].astype(int)
 		image = image.crop((box[0], box[1], box[2], box[3]))
@@ -178,7 +179,6 @@ class Stanford40:
 				boxes.append([x1, y1, x2, y2])
 
 				labels.append(self.class_dict[class_name])
-				print(labels)
 		
 		return (np.array(boxes, dtype=np.float32),
 				np.array(labels, dtype=np.int64))
