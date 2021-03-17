@@ -80,7 +80,7 @@ class Stanford40:
 		self.ids = np.array(self.ids)
 		self.ids = self.ids[mask]
 	
-	
+
 	def __parse_annotation(self, element):
 		""" Parse an annotation given an XML element.
 		"""
@@ -167,7 +167,7 @@ class Stanford40:
 		labels = []
 		is_difficult = []
 		for object in objects:
-			class_name = object.find('action').text.lower().strip()
+			class_name = object.find('action').text.strip()
 			# we're only concerned with clases in our list
 			if class_name in self.class_dict:
 				bbox = object.find('bndbox')
