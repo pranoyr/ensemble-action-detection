@@ -178,6 +178,7 @@ class Stanford40:
 				boxes.append([x1, y1, x2, y2])
 
 				labels.append(self.class_dict[class_name])
+				print(labels)
 		
 		return (np.array(boxes, dtype=np.float32),
 				np.array(labels, dtype=np.int64))

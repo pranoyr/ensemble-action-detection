@@ -59,11 +59,11 @@ def main():
 	train_loader = torch.utils.data.DataLoader(training_data,
 											   batch_size=opt.batch_size,
 											   shuffle=True,
-											   num_workers=1)
+											   num_workers=0)
 	val_loader = torch.utils.data.DataLoader(validation_data,
 											 batch_size=opt.batch_size,
 											 shuffle=True,
-											 num_workers=1)
+											 num_workers=0)
 	print(f'Number of training examples: {len(train_loader.dataset)}')
 	print(f'Number of validation examples: {len(val_loader.dataset)}')
 
