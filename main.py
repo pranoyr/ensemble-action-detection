@@ -116,7 +116,7 @@ def main():
 					'optimizer_state_dict': optimizer.state_dict()}
 			#torch.save(state, os.path.join('snapshots', f'model{epoch}.pth'))
 			if val_loss < th:
-				torch.save(state, os.path.join('./snapshots', f'ensemble-model.pth'))
+				torch.save(state, os.path.join('./snapshots', 'ensemble-model.pth'))
 				print("Epoch {} model saved!\n".format(epoch))
 				th = val_loss
 
