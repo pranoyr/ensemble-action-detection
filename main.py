@@ -71,21 +71,23 @@ def main():
 	summary_writer = tensorboardX.SummaryWriter(log_dir='tf_logs')
 	# define model
 	model = ResidualNet("ImageNet", opt.depth, opt.num_classes, "CBAM")
+	if opt.resume_path:
+		checkpoint = torch.load(opt.resume_path)
+		model.load_state_dict(checkpoint['model_state_dict'])
+		epoch = checkpoint['epoch']
+		print("Model Restored from Epoch {}".format(epoch))
+		opt.start_epoch = epoch + 1
 	model.to(device)
 
 	criterion = nn.CrossEntropyLoss()
 	optimizer = optim.Adam(model.parameters(), weight_decay=opt.wt_decay)
-	scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=opt.lr_patience)
-	
 	# resume model, optimizer if already exists
 	if opt.resume_path:
 		checkpoint = torch.load(opt.resume_path)
-		model.load_state_dict(checkpoint['model_state_dict'])
 		optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-		epoch = checkpoint['epoch']
-		print("Model Restored from Epoch {}".format(epoch))
-		opt.start_epoch = epoch + 1
 
+	scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=opt.lr_patience)
+	
 	th = 100000
 	# start training
 	for epoch in range(opt.start_epoch, opt.epochs+1):
@@ -114,7 +116,7 @@ def main():
 					'optimizer_state_dict': optimizer.state_dict()}
 			#torch.save(state, os.path.join('snapshots', f'model{epoch}.pth'))
 			if val_loss < th:
-				torch.save(state, os.path.join('./snapshots/', f'ensemble-model.pth'))
+				torch.save(state, os.path.join('./snapshots', f'ensemble-model.pth'))
 				print("Epoch {} model saved!\n".format(epoch))
 				th = val_loss
 
