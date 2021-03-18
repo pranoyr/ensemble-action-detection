@@ -30,7 +30,7 @@ def train_epoch(model, data_loader, criterion, optimizer, epoch, device, opt):
 		acc = accuracy(outputs, targets)
 
 		losses.update(loss.item(), data.size(0))
-		accuracies.update(acc[0],  data.size(0))
+		accuracies.update(acc[0].item(),  data.size(0))
 
 		optimizer.zero_grad()
 		loss.backward()
