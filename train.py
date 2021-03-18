@@ -18,7 +18,7 @@ def train_epoch(model, data_loader, criterion, optimizer, epoch, device, opt):
 	model.train()
 	
 	losses = AverageMeter('Loss', ':.4e')
-	accuracies = AverageMeter('Acc@1', ':6.2f')
+	accuracies = AverageMeter('Acc', ':6.2f')
 	# Training
 	for batch_idx, (data, targets) in enumerate(data_loader):
 		# compute outputs
@@ -43,5 +43,7 @@ def train_epoch(model, data_loader, criterion, optimizer, epoch, device, opt):
                 100. * batch_idx / len(data_loader), losses.avg))
 		
 	# show information
+	print(losses.avg)
+	print(accuracies.avg)
 	print(f' * Loss {losses.avg:.3f}, Accuracy {accuracies.avg:.3f}')
 	return losses.avg, accuracies.avg

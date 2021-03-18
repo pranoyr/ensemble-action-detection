@@ -67,4 +67,4 @@ print(a)
 
 # print(5 % 10)
 
-# print(f' * Loss {a.avg:.3f}, Accuracy {a.avg:.3f}')
+print(f' * Loss {a.avg:.3f}, Accuracy {a.avg:.3f}')

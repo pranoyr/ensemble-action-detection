@@ -20,7 +20,7 @@ def val_epoch(model, data_loader, criterion, device, opt):
 	model.eval()
 
 	losses = AverageMeter('Loss', ':.4e')
-	accuracies = AverageMeter('Acc@1', ':6.2f')
+	accuracies = AverageMeter('Acc', ':6.2f')
 	with torch.no_grad():
 		for (data, targets) in data_loader:
 			# compute output
