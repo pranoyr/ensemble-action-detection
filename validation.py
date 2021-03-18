@@ -34,7 +34,7 @@ def val_epoch(model, data_loader, criterion, device, opt):
 			accuracies.update(acc[0].item(),  data.size(0))
 
 	# show information
-	print(f' * Loss {losses.avg:.3f}, Accuracy {accuracies.avg:.3f}')
+	print(f' * Val Loss {losses.avg:.3f}, Val Acc {accuracies.avg:.3f}')
 	return losses.avg, accuracies.avg
 
 	

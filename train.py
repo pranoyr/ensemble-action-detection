@@ -45,5 +45,5 @@ def train_epoch(model, data_loader, criterion, optimizer, epoch, device, opt):
 			progress.display(batch_idx)
 		
 	# show information
-	print(f' * Loss {losses.avg:.3f}, Accuracy {accuracies.avg:.3f}')
+	print(f' * Train Loss {losses.avg:.3f}, Train Acc {accuracies.avg:.3f}')
 	return losses.avg, accuracies.avg
