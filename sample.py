@@ -61,6 +61,10 @@ class AverageMeter(object):
 a =  AverageMeter('Acc@1', ':6.2f')
 a.update(0.3, 30)
 a.update(0.2, 30)
-print(a.avg)
 
-print(5 % 10)
+print(a)
+# print(a.avg)
+
+# print(5 % 10)
+
+# print(f' * Loss {a.avg:.3f}, Accuracy {a.avg:.3f}')
