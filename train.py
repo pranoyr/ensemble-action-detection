@@ -43,9 +43,9 @@ def train_epoch(model, data_loader, criterion, optimizer, epoch, device, opt):
 
 		# show information
 		if batch_idx % opt.log_interval == 0:
-			print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                epoch, batch_idx * len(data), len(data_loader.dataset),
-                100. * batch_idx / len(data_loader), losses.avg))
+			# print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+            #     epoch, batch_idx * len(data), len(data_loader.dataset),
+            #     100. * batch_idx / len(data_loader), losses.avg))
 			progress.display(batch_idx)
 		
 	# show information
