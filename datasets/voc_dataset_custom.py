@@ -62,8 +62,6 @@ class Stanford40:
 
 		self.class_dict = {class_name: i for i,
 						   class_name in enumerate(self.class_names)}
-
-		print(self.class_dict)
 		# remove ids
 		self.remove_ids()
 
