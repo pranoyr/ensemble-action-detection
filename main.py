@@ -81,13 +81,12 @@ def main():
 
 	criterion = nn.CrossEntropyLoss()
 	optimizer = optim.Adam(model.parameters(), weight_decay=opt.wt_decay)
-	# resume model, optimizer if already exists
+	scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=opt.lr_patience)
 	if opt.resume_path:
 		checkpoint = torch.load(opt.resume_path)
 		optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+		scheduler.load_state_dict(checkpoint['scheduler_state_dict'])
 
-	scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=opt.lr_patience)
-	
 	th = 100000
 	# start training
 	for epoch in range(opt.start_epoch, opt.epochs+1):
@@ -113,8 +112,7 @@ def main():
 				'lr_rate', lr, global_step=epoch)
 
 			state = {'epoch': epoch, 'model_state_dict': model.state_dict(),
-					'optimizer_state_dict': optimizer.state_dict()}
-			#torch.save(state, os.path.join('snapshots', f'model{epoch}.pth'))
+					'optimizer_state_dict': optimizer.state_dict(), 'scheduler_state_dict':scheduler.state_dict()}
 			if val_loss < th:
 				torch.save(state, os.path.join('./snapshots', 'ensemble-model.pth'))
 				print("Epoch {} model saved!\n".format(epoch))
