@@ -6,6 +6,7 @@ import torchvision
 import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 from torchvision.models import resnet50
+import time
 import argparse
 import tensorboardX
 import os
@@ -19,10 +20,9 @@ def train_epoch(model, data_loader, criterion, optimizer, epoch, device, opt):
 	
 	losses = AverageMeter('Loss', ':.4e')
 	accuracies = AverageMeter('Acc', ':6.2f')
-	batch_time = AverageMeter('Time', ':6.3f')
 	progress = ProgressMeter(
         len(data_loader),
-        [batch_time, losses, accuracies],
+        [losses, accuracies],
         prefix='Train: ')
 	# Training
 	for batch_idx, (data, targets) in enumerate(data_loader):
@@ -43,10 +43,6 @@ def train_epoch(model, data_loader, criterion, optimizer, epoch, device, opt):
 		# show information
 		if batch_idx % opt.log_interval == 0:
 			progress.display(batch_idx)
-		
-		# measure elapsed time
-		batch_time.update(time.time() - end)
-		end = time.time()
 		
 	# show information
 	print(f' * Loss {losses.avg:.3f}, Accuracy {accuracies.avg:.3f}')
