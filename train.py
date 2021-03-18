@@ -10,7 +10,7 @@ import argparse
 import tensorboardX
 import os
 import random
-from utils.util import AverageMeter, accuracy
+from utils.util import AverageMeter, accuracy, ProgressMeter
 import numpy as np
 
 def train_epoch(model, data_loader, criterion, optimizer, epoch, device, opt):
@@ -19,6 +19,11 @@ def train_epoch(model, data_loader, criterion, optimizer, epoch, device, opt):
 	
 	losses = AverageMeter('Loss', ':.4e')
 	accuracies = AverageMeter('Acc', ':6.2f')
+	batch_time = AverageMeter('Time', ':6.3f')
+	progress = ProgressMeter(
+        len(data_loader),
+        [batch_time, losses, accuracies],
+        prefix='Train: ')
 	# Training
 	for batch_idx, (data, targets) in enumerate(data_loader):
 		# compute outputs
@@ -41,9 +46,8 @@ def train_epoch(model, data_loader, criterion, optimizer, epoch, device, opt):
 			print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                 epoch, batch_idx * len(data), len(data_loader.dataset),
                 100. * batch_idx / len(data_loader), losses.avg))
+			progress.display(i)
 		
 	# show information
-	print(losses.avg)
-	print(accuracies.avg)
 	print(f' * Loss {losses.avg:.3f}, Accuracy {accuracies.avg:.3f}')
 	return losses.avg, accuracies.avg
