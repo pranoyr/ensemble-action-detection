@@ -25,12 +25,11 @@ def val_epoch(model, data_loader, criterion, device, opt):
 		for (data, targets) in data_loader:
 			# compute output
 			data, targets = data.to(device), targets.to(device)
+
 			outputs =  model(data)
-
-			# compute loss
 			loss = criterion(outputs, targets)
-			acc = accuracy(outputs, targets)
 
+			acc = accuracy(outputs, targets)
 			losses.update(loss.item(), data.size(0))
 			accuracies.update(acc[0].item(),  data.size(0))
 

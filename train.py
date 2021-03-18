@@ -28,12 +28,11 @@ def train_epoch(model, data_loader, criterion, optimizer, epoch, device, opt):
 	for batch_idx, (data, targets) in enumerate(data_loader):
 		# compute outputs
 		data, targets = data.to(device), targets.to(device)
+
 		outputs =  model(data)
-
-		# compute loss
 		loss = criterion(outputs, targets)
-		acc = accuracy(outputs, targets)
 
+		acc = accuracy(outputs, targets)
 		losses.update(loss.item(), data.size(0))
 		accuracies.update(acc[0].item(),  data.size(0))
 
@@ -43,10 +42,11 @@ def train_epoch(model, data_loader, criterion, optimizer, epoch, device, opt):
 
 		# show information
 		if batch_idx % opt.log_interval == 0:
-			# print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-            #     epoch, batch_idx * len(data), len(data_loader.dataset),
-            #     100. * batch_idx / len(data_loader), losses.avg))
 			progress.display(batch_idx)
+		
+		# measure elapsed time
+		batch_time.update(time.time() - end)
+		end = time.time()
 		
 	# show information
 	print(f' * Loss {losses.avg:.3f}, Accuracy {accuracies.avg:.3f}')
