@@ -46,7 +46,7 @@ def train_epoch(model, data_loader, criterion, optimizer, epoch, device, opt):
 			print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                 epoch, batch_idx * len(data), len(data_loader.dataset),
                 100. * batch_idx / len(data_loader), losses.avg))
-			progress.display(i)
+			progress.display(batch_idx)
 		
 	# show information
 	print(f' * Loss {losses.avg:.3f}, Accuracy {accuracies.avg:.3f}')
