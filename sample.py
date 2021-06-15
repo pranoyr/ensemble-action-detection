@@ -1,70 +1,96 @@
 import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+import torchvision.transforms as transforms
+import torchvision.datasets as datasets
+from torchvision.models import resnet18
+from models.model_resnet import ResidualNet
+import argparse
+import tensorboardX
+import os
+import random
 import numpy as np
+from torch.nn import BCEWithLogitsLoss
+from opts import parse_opts
+from torch.optim import lr_scheduler
 
-# bboxes = torch.Tensor([[1,2,3,4],
-#                 [5,6,7,8],
-#                 [9,8,7,6]])
+opt = parse_opts()
+print(opt)
 
+seed = 0
+random.seed(seed)
+np.random.seed(seed)
+torch.manual_seed(seed)
 
-# outputs = torch.Tensor([[0.1,0.1,0.1,0.06,0.7],
-#                         [0.6,0.1,0.1,0.8,0.1],
-#                         [0.1,0.5,0.5,0.1,0.1]])
+use_cuda = torch.cuda.is_available()
+device = torch.device(f"cuda:{opt.gpu}" if use_cuda else "cpu")
 
-# scores, indices = torch.topk(outputs, dim=1, k=2)
-# print(indices)
+transform = transforms.Compose([
+	transforms.ToTensor(),
+	transforms.Normalize(mean=[ 1.1921e-06,  2.3842e-07,  1.2517e-06,  1.7881e-07,  1.4305e-06,
+		-1.1921e-07], std=[0.0408, 0.0408, 0.0408, 0.0408, 0.0408, 0.0408])
+])
 
-# for i, preds in enumerate(indices):
-#     mask = scores[i] > 0.5
-#     results = preds[mask]
-#     print(results)
-#     print(bboxes[i])
-
-
-
-#print(bboxes[mask, :])
-
-
-
-# from torchvision.models import resnet
-
-# model = resnet.resnet18(pretrained=True)
-# print(model)
-  
-
-# model = torch.nn.Sequential(*(list(model.children())[:-2]))
-# print(model)
+training_data = SETIDataset(root_dir, csv_file, transform)
+# validation_data = get_validation_set(opt, test_transform)
 
 
-class AverageMeter(object):
-    """Computes and stores the average and current value"""
-    def __init__(self, name, fmt=':f'):
-        self.name = name
-        self.fmt = fmt
-        self.reset()
+train_loader = torch.utils.data.DataLoader(training_data,
+											batch_size=opt.batch_size,
+											shuffle=True,
+											num_workers=0)
+# val_loader = torch.utils.data.DataLoader(validation_data,
+# 										 batch_size=opt.batch_size,
+# 										 shuffle=True,
+# 										 num_workers=0)
+print(f'Number of training examples: {len(train_loader.dataset)}')
+# print(f'Number of validation examples: {len(val_loader.dataset)}')
 
-    def reset(self):
-        self.val = 0
-        self.avg = 0
-        self.sum = 0
-        self.count = 0
+# tensorboard
+summary_writer = tensorboardX.SummaryWriter(log_dir='tf_logs')
+# define model
+model = ResidualNet("ImageNet", opt.depth, 2, "CBAM")
+if opt.resume_path:
+	checkpoint = torch.load(opt.resume_path)
+	model.load_state_dict(checkpoint['model_state_dict'])
+	epoch = checkpoint['epoch']
+	print("Model Restored from Epoch {}".format(epoch))
+	opt.start_epoch = epoch + 1
+model.to(device)
 
-    def update(self, val, n=1):
-        self.val = val
-        self.sum += val * n
-        self.count += n
-        self.avg = self.sum / self.count
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), weight_decay=opt.wt_decay)
+# scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=opt.lr_patience)
 
-    def __str__(self):
-        fmtstr = '{name} {val' + self.fmt + '} ({avg' + self.fmt + '})'
-        return fmtstr.format(**self.__dict__)
+th = 100000
+# start training
+for epoch in range(opt.start_epoch, opt.epochs+1):
+	# train, test model
+	train_loss, train_acc = train_epoch(model, train_loader, criterion, optimizer, epoch, device, opt)
+	# val_loss, val_acc = val_epoch(model, val_loader, criterion, device, opt)
+	# scheduler.step(val_loss)
 
-a =  AverageMeter('Acc@1', ':6.2f')
-a.update(0.3, 30)
-a.update(0.2, 30)
+	lr = optimizer.param_groups[0]['lr']  
+	
+	# saving weights to checkpoint
+	if (epoch) % opt.save_interval == 0:
+		# write summary
+		summary_writer.add_scalar(
+			'losses/train_loss', train_loss, global_step=epoch)
+		# summary_writer.add_scalar(
+		# 	'losses/val_loss', val_loss, global_step=epoch)
+		summary_writer.add_scalar(
+			'acc/train_acc', train_acc, global_step=epoch)
+		# summary_writer.add_scalar(
+		# 	'acc/val_acc', val_acc, global_step=epoch)
+		summary_writer.add_scalar(
+			'lr_rate', lr, global_step=epoch)
 
-print(a)
-# print(a.avg)
+		# state = {'epoch': epoch, 'model_state_dict': model.state_dict(),
+		# 		'optimizer_state_dict': optimizer.state_dict(), 'scheduler_state_dict':scheduler.state_dict()}
+		# if val_loss < th:
+		# 	torch.save(state, os.path.join('./snapshots', 'ensemble-model.pth'))
+		# 	print("Epoch {} model saved!\n".format(epoch))
+		# 	th = val_loss
 
-# print(5 % 10)
-
-print(f' * Loss {a.avg:.3f}, Accuracy {a.avg:.3f}')
