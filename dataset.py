@@ -11,7 +11,7 @@ def get_training_set(opt, transform):
     
     if opt.dataset == 'Mask':
         training_data = torchvision.datasets.ImageFolder(
-		opt.train_path, transform=transform)
+		f"{opt.dataset_path}/Train", transform=transform)
     return training_data
 
 def get_validation_set(opt, transform):
@@ -22,7 +22,7 @@ def get_validation_set(opt, transform):
             is_test=True)
     if opt.dataset == 'Mask':
         validation_data = torchvision.datasets.ImageFolder(
-		opt.val_path, transform=transform)
+		f"{opt.dataset_path}/Validation", transform=transform)
 
 
     return validation_data
