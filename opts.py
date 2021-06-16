@@ -37,5 +37,6 @@ def parse_opts():
 						default=5e-4, help="weight decay")
 	parser.add_argument("--start_epoch", type=int,
 						default=1)
+	parser.add_argument("--img_path", type=str)
 	opt = parser.parse_args()
 	return opt

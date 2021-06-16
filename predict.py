@@ -22,6 +22,8 @@ from PIL import Image
 
 
 
+
+
 def main():
     opt = parse_opts()
     print(opt)
@@ -37,10 +39,7 @@ def main():
     use_cuda = torch.cuda.is_available()
     device = torch.device(f"cuda:{opt.gpu}" if use_cuda else "cpu")
 
-    class_to_idx = class_mapping()
-    idx_to_class = {}
-    for name, label in class_to_idx.items():
-        idx_to_class[label] = name
+    idx_to_class = {"mask":0, "unmask":1}
    
     transform = transforms.Compose([
         #transforms.RandomCrop(32, padding=3),
@@ -57,7 +56,7 @@ def main():
     model = model.to(device)
     model.eval()
 
-    img = cv2.imread('/Users/pranoyr/Desktop/reid/3.png')
+    img = cv2.imread(opt.img_path)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img = Image.fromarray(img)
     img = transform(img)
