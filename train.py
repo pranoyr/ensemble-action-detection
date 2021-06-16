@@ -14,7 +14,7 @@ import random
 from utils.util import AverageMeter, accuracy, ProgressMeter
 import numpy as np
 
-def train_epoch(model, data_loader, criterion, optimizer, epoch, device, opt):
+def train_epoch(model, data_loader, criterion, optimizer, device, opt):
    
 	model.train()
 	

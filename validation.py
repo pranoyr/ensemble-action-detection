@@ -15,7 +15,7 @@ from utils.util import AverageMeter, accuracy
 
 
 
-def val_epoch(model, data_loader, criterion, device, opt):
+def val_epoch(model, data_loader, criterion, device):
 
 	model.eval()
 

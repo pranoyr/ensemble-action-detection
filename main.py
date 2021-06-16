@@ -91,8 +91,8 @@ def main():
 	# start training
 	for epoch in range(opt.start_epoch, opt.epochs+1):
 		# train, test model
-		train_loss, train_acc = train_epoch(model, train_loader, criterion, optimizer, epoch, device, opt)
-		val_loss, val_acc = val_epoch(model, val_loader, criterion, device, opt)
+		train_loss, train_acc = train_epoch(model, train_loader, criterion, optimizer, device, opt)
+		val_loss, val_acc = val_epoch(model, val_loader, criterion, device)
 		scheduler.step(val_loss)
 
 		lr = optimizer.param_groups[0]['lr']  
