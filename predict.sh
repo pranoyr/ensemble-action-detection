@@ -1,1 +1,1 @@
-python predict.py --num_classes 40 --img_H 150 --img_W 150
+python predict.py --num_classes 2 --img_H 224 --img_W 224
