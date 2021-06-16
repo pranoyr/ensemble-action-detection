@@ -1,1 +1,1 @@
-python predict.py --num_classes <num_classes> --resume <path-to-model> --img_path <path-to-input> --depth <depth of model>
+python predict.py --num_classes <num_classes> --resume <path-to-model> --img_path <path-to-input> --depth <depth-of-model>
