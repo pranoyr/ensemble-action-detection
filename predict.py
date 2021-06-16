@@ -21,9 +21,6 @@ from torch.optim import lr_scheduler
 from PIL import Image
 
 
-
-
-
 def main():
     opt = parse_opts()
     print(opt)
