@@ -20,6 +20,7 @@ from torch.nn import BCEWithLogitsLoss
 from validation import val_epoch
 from opts import parse_opts
 from torch.optim import lr_scheduler
+from PIL import Image
 from dataset import get_training_set, get_validation_set
 
 
@@ -30,9 +31,9 @@ class MyLazyDataset(data.Dataset):
 
 	def __getitem__(self, index):
 		if self.transform:
-			x = self.transform(self.dataset[index][0])
+			x = self.transform(Image.fromarray(self.dataset[index][0]))
 		else:
-			x = self.dataset[index][0]
+			x = Image.fromarray(self.dataset[index][0])
 		y = self.dataset[index][1]
 		return x, y
 	
