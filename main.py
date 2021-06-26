@@ -8,6 +8,7 @@ import torchvision.datasets as datasets
 from torchvision.models import resnet18
 from models.model_resnet import ResidualNet
 import argparse
+from torch.utils.data import ConcatDataset
 import tensorboardX
 import os
 import random
@@ -53,7 +54,9 @@ def main():
 	])
 
 	training_data = get_training_set(opt, train_transform)
+	training_data = ConcatDataset(training_data)
 	validation_data = get_validation_set(opt, test_transform)
+	validation_data = ConcatDataset(validation_data)
 	
 
 	train_loader = torch.utils.data.DataLoader(training_data,

@@ -86,7 +86,7 @@ class Stanford40(data.Dataset):
 		# truncated = _findNode(element, 'truncated', parse=int)
 		# difficult = _findNode(element, 'difficult', parse=int)
 
-		class_name = _findNode(element, 'name').text
+		class_name = _findNode(element, 'action').text
 		if class_name not in self.class_dict:
 			return None, None
 
