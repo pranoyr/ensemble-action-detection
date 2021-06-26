@@ -74,7 +74,7 @@ def main():
 	])
 
 	training_data = torchvision.datasets.ImageFolder(
-		opt.dataset_path, transform=train_transform)
+		opt.dataset_path)
 	
 	traindataset = MyLazyDataset(training_data, train_transform)
 	valdataset = MyLazyDataset(training_data,test_transform)
