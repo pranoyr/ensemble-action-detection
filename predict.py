@@ -34,7 +34,7 @@ def main():
     use_cuda = torch.cuda.is_available()
     device = torch.device(f"cuda:{opt.gpu}" if use_cuda else "cpu")
 
-    idx_to_class = {"mask":0, "unmask":1}
+    idx_to_class = {0:"mask", 1:"unmask"}
    
     transform = transforms.Compose([
         #transforms.RandomCrop(32, padding=3),
@@ -53,18 +53,23 @@ def main():
 
     img = cv2.imread(opt.img_path)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    # img = torch.from_numpy(img)
     img = Image.fromarray(img)
     img = transform(img)
     img = torch.unsqueeze(img, dim=0)
     with torch.no_grad():
         outputs = model(img)
-        outputs = torch.sigmoid(outputs)
-        scores, indices = torch.topk(outputs, dim=1, k=1)
-        mask = scores > 0.5
+        outputs = nn.Softmax(dim=1)(outputs)
+        scores, indices = torch.max(outputs, 1)
+        mask = scores > 0.4
         preds = indices[mask]
+        print(scores[mask].item())
+        print(preds.item())
+
+        print(idx_to_class[preds.item()])
     
-        preds = [idx_to_class[label.item()] for label in preds]
-        print(preds)
+
+        # preds = [idx_to_class[label.item()] for label in preds]
 
 if __name__ == "__main__":
     main()

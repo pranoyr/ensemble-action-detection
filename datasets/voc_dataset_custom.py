@@ -4,6 +4,7 @@ import pathlib
 import xml.etree.ElementTree as ET
 import cv2
 from PIL import Image
+from torch.utils import data
 import os
 
 
@@ -23,7 +24,7 @@ def _findNode(parent, name, debug_name=None, parse=None):
 	return result
 
 
-class Stanford40:
+class Stanford40(data.Dataset):
 	def __init__(self, root, transform=None, is_test=False, keep_difficult=False, label_file=None):
 		"""Dataset for VOC data.
 		Args:
