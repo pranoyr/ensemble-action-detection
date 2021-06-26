@@ -31,9 +31,9 @@ class MyLazyDataset(data.Dataset):
 
 	def __getitem__(self, index):
 		if self.transform:
-			x = self.transform(Image.fromarray(self.dataset[index][0]))
+			x = self.transform(self.dataset[index][0])
 		else:
-			x = Image.fromarray(self.dataset[index][0])
+			x = self.dataset[index][0]
 		y = self.dataset[index][1]
 		return x, y
 	
