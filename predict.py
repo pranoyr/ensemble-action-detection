@@ -61,7 +61,7 @@ def main():
         outputs = model(img)
         outputs = nn.Softmax(dim=1)(outputs)
         scores, indices = torch.max(outputs, 1)
-        mask = scores > 0.4
+        mask = scores > 0.5
         preds = indices[mask]
         print(scores[mask].item())
         print(preds.item())

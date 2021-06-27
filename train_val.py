@@ -4,6 +4,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 import torchvision
 import torchvision.transforms as transforms
+from transforms import GaussianNoise
 import torchvision.datasets as datasets
 from torchvision.models import resnet18
 from models.model_resnet import ResidualNet
@@ -59,7 +60,9 @@ def main():
 	train_transform = transforms.Compose([
 		#transforms.RandomCrop(32, padding=3),
 		transforms.Resize((224, 224)),
-		transforms.RandomHorizontalFlip(),
+		transforms.RandomHorizontalFlip(0.5),
+		transforms.ColorJitter(brightness=[0.2,1]),
+		GaussianNoise(0.5),
 		# transforms.RandomRotation(10),
 		transforms.ToTensor(),
 		transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[
