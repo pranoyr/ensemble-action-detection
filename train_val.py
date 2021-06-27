@@ -36,7 +36,7 @@ class MyLazyDataset(data.Dataset):
 		else:
 			x = self.dataset[index][0]
 		y = self.dataset[index][1]
-		return x, y
+		return x.type(torch.FloatTensor), y
 	
 	def __len__(self):
 		return len(self.dataset)
