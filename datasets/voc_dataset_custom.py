@@ -164,7 +164,7 @@ class CustomDataset(data.Dataset):
 		labels = []
 		is_difficult = []
 		for object in objects:
-			class_name = object.find('action').text.strip()
+			class_name = object.find('name').text.strip()
 			# we're only concerned with clases in our list
 			if class_name in self.class_dict:
 				bbox = object.find('bndbox')
