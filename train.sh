@@ -1,1 +1,1 @@
-python main.py --dataset_path /Users/pranoyr/Downloads/Stanford40 --dataset Stanford40  --num_classes 40
+python main.py --dataset_path /home/nvidia/data/home/neuroplex/data/Phoning-Smoking-Dataset --dataset Custom  --num_classes 2 --depth 18
