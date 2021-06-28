@@ -37,7 +37,7 @@ class CustomDataset(data.Dataset):
 			image_sets_file = self.root / "ImageSplits/test.txt"
 		else:
 			image_sets_file = self.root / "ImageSplits/train.txt"
-		self.ids = Stanford40._read_image_ids(image_sets_file)
+		self.ids = CustomDataset._read_image_ids(image_sets_file)
 		self.keep_difficult = keep_difficult
 		# if the labels file exists, read in the class names
 		label_file_name = self.root / "labels.txt"
