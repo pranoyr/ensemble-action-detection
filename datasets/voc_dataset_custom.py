@@ -24,7 +24,7 @@ def _findNode(parent, name, debug_name=None, parse=None):
 	return result
 
 
-class Stanford40(data.Dataset):
+class CustomDataset(data.Dataset):
 	def __init__(self, root, transform=None, is_test=False, keep_difficult=False, label_file=None):
 		"""Dataset for VOC data.
 		Args:
@@ -59,7 +59,7 @@ class Stanford40(data.Dataset):
 
 		else:
 			logging.info("No labels file, using default VOC classes.")
-			self.class_names = ('running', 'walking')
+			self.class_names = ('PersonSmoking', 'PersonPhoning', 'PersonOther')
 
 		self.class_dict = {class_name: i for i,
 						   class_name in enumerate(self.class_names)}
@@ -133,7 +133,7 @@ class Stanford40(data.Dataset):
 		image = image.crop((box[0], box[1], box[2], box[3]))
 		if self.transform:
 			image = self.transform(image)
-		return image, label
+		return image.type(torch.float), label
 
 	def get_image(self, index):
 		image_id = self.ids[index]

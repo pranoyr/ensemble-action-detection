@@ -1,4 +1,5 @@
 from datasets.stanford import Stanford40
+from datasets.voc_dataset_custom import CustomDataset
 import os
 import torchvision
 
@@ -10,6 +11,13 @@ def get_training_set(opt, transform):
             root=opt.dataset_path,
             transform=transform,
             is_test=False))
+
+    if opt.dataset == 'Custom':
+        training_data.append(CustomDataset(
+            root=opt.dataset_path,
+            transform=transform,
+            is_test=False))
+    
     
     if opt.dataset == 'Mask':
         training_data.append(torchvision.datasets.ImageFolder(
@@ -24,6 +32,13 @@ def get_validation_set(opt, transform):
             root=opt.dataset_path,
             transform=transform,
             is_test=True))
+
+    if opt.dataset == 'Custom':
+        validation_data.append(CustomDataset(
+        root=opt.dataset_path,
+        transform=transform,
+        is_test=True))
+
     if opt.dataset == 'Mask':
         validation_data.append(torchvision.datasets.ImageFolder(
 		f"{opt.dataset_path}/Validation", transform=transform))

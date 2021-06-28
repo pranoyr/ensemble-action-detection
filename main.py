@@ -8,6 +8,7 @@ import torchvision.datasets as datasets
 from torchvision.models import resnet18
 from models.model_resnet import ResidualNet
 import argparse
+from transforms import GaussianNoise
 from torch.utils.data import ConcatDataset
 import tensorboardX
 import os
@@ -40,6 +41,9 @@ def main():
 		#transforms.RandomCrop(32, padding=3),
 		transforms.Resize((224, 224)),
 		transforms.RandomHorizontalFlip(),
+		transforms.ColorJitter(brightness=[0.5,1]),
+    	# transforms.RandomRotation(180),
+    	GaussianNoise(0.5),
 		# transforms.RandomRotation(10),
 		transforms.ToTensor(),
 		transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[
