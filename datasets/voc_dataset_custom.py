@@ -5,6 +5,7 @@ import xml.etree.ElementTree as ET
 import cv2
 from PIL import Image
 from torch.utils import data
+import torch
 import os
 
 
