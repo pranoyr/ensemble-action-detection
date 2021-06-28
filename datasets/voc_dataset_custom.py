@@ -158,7 +158,7 @@ class CustomDataset(data.Dataset):
 		return ids
 
 	def _get_annotation(self, image_id):
-		annotation_file = self.root / f"XMLAnnotations/{image_id}.xml"
+		annotation_file = self.root / f"Annotations/{image_id}.xml"
 		objects = ET.parse(annotation_file).findall("object")
 		boxes = []
 		labels = []
