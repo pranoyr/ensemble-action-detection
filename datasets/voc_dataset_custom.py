@@ -71,7 +71,7 @@ class CustomDataset(data.Dataset):
 		image_names_copy = self.ids.copy()
 		for image_name in self.ids:
 			filename = os.path.join(image_name + '.xml')
-			tree = ET.parse(os.path.join(self.root, 'XMLAnnotations', filename))
+			tree = ET.parse(os.path.join(self.root, 'Annotations', filename))
 			annotations = self.__parse_annotations(tree.getroot())
 			mask.append(annotations['labels'].size != 0)
 
