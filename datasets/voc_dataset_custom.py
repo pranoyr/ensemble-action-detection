@@ -34,9 +34,9 @@ class CustomDataset(data.Dataset):
 		self.root = pathlib.Path(root)
 		self.transform = transform
 		if is_test:
-			image_sets_file = self.root / "ImageSplits/test.txt"
+			image_sets_file = self.root / "ImageSets/test.txt"
 		else:
-			image_sets_file = self.root / "ImageSplits/train.txt"
+			image_sets_file = self.root / "ImageSets/train.txt"
 		self.ids = CustomDataset._read_image_ids(image_sets_file)
 		self.keep_difficult = keep_difficult
 		# if the labels file exists, read in the class names
