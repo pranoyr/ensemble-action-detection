@@ -34,7 +34,7 @@ def main():
     use_cuda = torch.cuda.is_available()
     device = torch.device(f"cuda:{opt.gpu}" if use_cuda else "cpu")
 
-    idx_to_class = {0:"mask", 1:"unmask"}
+    idx_to_class = {0:"Smoking", 1:"Phoning", 2:"Other"}
    
     transform = transforms.Compose([
         #transforms.RandomCrop(32, padding=3),
@@ -61,7 +61,7 @@ def main():
         outputs = model(img)
         outputs = nn.Softmax(dim=1)(outputs)
         scores, indices = torch.max(outputs, 1)
-        mask = scores > 0.9
+        mask = scores > 0.5
         preds = indices[mask]
         print(scores[mask].item())
         print(preds.item())
