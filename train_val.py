@@ -8,6 +8,7 @@ from transforms import GaussianNoise
 import torchvision.datasets as datasets
 from torchvision.models import resnet18
 from models.model_resnet import ResidualNet
+from vit_pytorch.vit import ViT
 from torch.utils import data
 from torch.utils.data import Subset
 
@@ -59,7 +60,7 @@ def main():
 
 	train_transform = transforms.Compose([
 		#transforms.RandomCrop(32, padding=3),
-		transforms.Resize((224, 224)),
+		transforms.Resize((256, 256)),
 		transforms.RandomHorizontalFlip(0.5),
 		transforms.ColorJitter(brightness=[0.2,1]),
 		GaussianNoise(0.5),
@@ -70,7 +71,7 @@ def main():
 	])
 	test_transform = transforms.Compose([
 		#transforms.RandomCrop(32, padding=3),
-		transforms.Resize((224, 224)),
+		transforms.Resize((256, 256)),
 		transforms.ToTensor(),
 		transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[
 			0.229, 0.224, 0.225])
@@ -107,7 +108,19 @@ def main():
 	# tensorboard
 	summary_writer = tensorboardX.SummaryWriter(log_dir='tf_logs')
 	# define model
-	model = ResidualNet("ImageNet", opt.depth, opt.num_classes, "CBAM")
+	# model = ResidualNet("ImageNet", opt.depth, opt.num_classes, "CBAM")
+	model = ViT(
+    image_size = 256,
+    patch_size = 32,
+    num_classes = 2,
+    dim = 1024,
+    depth = 6,
+    heads = 8,
+    mlp_dim = 2048,
+    dropout = 0.1,
+    emb_dropout = 0.1
+)
+
 	if opt.resume_path:
 		checkpoint = torch.load(opt.resume_path)
 		model.load_state_dict(checkpoint['model_state_dict'])
