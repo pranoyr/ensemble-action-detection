@@ -31,6 +31,7 @@ def train_epoch(model, data_loader, criterion, optimizer, device, opt):
 
 		outputs =  model(data)
 		loss = criterion(outputs, targets)
+		print(loss)
 
 		acc = accuracy(outputs, targets)
 		losses.update(loss.item(), data.size(0))
