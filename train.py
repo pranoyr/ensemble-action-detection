@@ -31,6 +31,7 @@ def train_epoch(model, data_loader, criterion, optimizer, device, opt):
 
 		outputs =  model(data)
 		print(outputs.shape)
+		print(targets.shape)
 		loss = criterion(outputs, targets)
 		print(loss)
 
