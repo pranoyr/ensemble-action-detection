@@ -102,12 +102,12 @@ def main():
 
 
 
-	test_transform = A.Compose([
-		#transforms.RandomCrop(32, padding=3),
-		A.Resize(256, 256),
-		A.Normalize(),
-		ToTensorV2(p=1.0)
-	])
+	# test_transform = A.Compose([
+	# 	#transforms.RandomCrop(32, padding=3),
+	# 	A.Resize(256, 256),
+	# 	A.Normalize(),
+	# 	ToTensorV2(p=1.0)
+	# ])
 
 	training_data = torchvision.datasets.ImageFolder(
 		opt.dataset_path)
