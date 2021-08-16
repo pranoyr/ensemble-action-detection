@@ -5,6 +5,7 @@ import torch.optim as optim
 import torchvision
 import torchvision.transforms as transforms
 from transforms import GaussianNoise
+from efficientnet_pytorch import EfficientNet
 import torchvision.datasets as datasets
 from torchvision.models import resnet18
 from models.model_resnet import ResidualNet
@@ -109,17 +110,18 @@ def main():
 	summary_writer = tensorboardX.SummaryWriter(log_dir='tf_logs')
 	# define model
 	# model = ResidualNet("ImageNet", opt.depth, opt.num_classes, "CBAM")
-	model = ViT(
-    image_size = 256,
-    patch_size = 32,
-    num_classes = 2,
-    dim = 1024,
-    depth = 6,
-    heads = 8,
-    mlp_dim = 2048,
-    dropout = 0.1,
-    emb_dropout = 0.1
-)
+	model = EfficientNet.from_pretrained('efficientnet-b0')
+# 	model = ViT(
+#     image_size = 256,
+#     patch_size = 32,
+#     num_classes = 2,
+#     dim = 1024,
+#     depth = 6,
+#     heads = 8,
+#     mlp_dim = 2048,
+#     dropout = 0.1,
+#     emb_dropout = 0.1
+# )
 
 	if opt.resume_path:
 		checkpoint = torch.load(opt.resume_path)
