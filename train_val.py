@@ -40,7 +40,7 @@ class MyLazyDataset(data.Dataset):
 
 	def __getitem__(self, index):
 		if self.transform:
-			x = self.transform(image = np.array(self.dataset[index][0]))["image"]
+			x = self.transform(self.dataset[index][0])
 		else:
 			x = self.dataset[index][0]
 		y = self.dataset[index][1]
