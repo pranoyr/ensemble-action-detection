@@ -140,7 +140,7 @@ def main():
 	summary_writer = tensorboardX.SummaryWriter(log_dir='tf_logs')
 	# define model
 	# model = ResidualNet("ImageNet", opt.depth, opt.num_classes, "CBAM")
-	model = torchvision.models.resnet18(pretrained=True, num_classes=opt.num_classes)
+	model = torchvision.models.resnet18(pretrained=True)
 	for param in model.parameters():
 		param.requires_grad = False
 	model.fc = nn.Linear(model.fc.in_features, opt.num_classes)
