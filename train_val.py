@@ -17,7 +17,7 @@ from torch.utils.data import Subset
 
 
 import albumentations as A
-from albumentations.pytorch.transforms import ToTensorV2
+from albumentations.pytorch.transforms import ToTensorV2, normalize
 
 import argparse
 import tensorboardX
@@ -89,7 +89,7 @@ def main():
 	A.GridDropout( holes_number_x=10, holes_number_y=10, ratio=0.4)
 	
 	]),
-	A.normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0),
+	normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0),
 	ToTensorV2(p=1.0)
 	])
 
@@ -98,7 +98,7 @@ def main():
 	test_transform = A.Compose([
 		#transforms.RandomCrop(32, padding=3),
 		A.Resize(256, 256),
-			A.normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0),
+		Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0),
 		ToTensorV2(p=1.0)
 	])
 
