@@ -140,7 +140,7 @@ def main():
 	summary_writer = tensorboardX.SummaryWriter(log_dir='tf_logs')
 	# define model
 	# model = ResidualNet("ImageNet", opt.depth, opt.num_classes, "CBAM")
-	model = torchvision.models.resnet18(pretrained=True, num_classes=opt.num_classes)
+	model = torchvision.models.resnet18(pretrained=True, num_classes=opt.num_classes, strict=False)
 	# model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=opt.num_classes)
 # 	model = ViT(
 #     image_size = 256,
