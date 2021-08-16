@@ -101,7 +101,6 @@ def main():
 
 
 
-
 	# test_transform = A.Compose([
 	# 	#transforms.RandomCrop(32, padding=3),
 	# 	A.Resize(256, 256),
@@ -141,7 +140,8 @@ def main():
 	summary_writer = tensorboardX.SummaryWriter(log_dir='tf_logs')
 	# define model
 	# model = ResidualNet("ImageNet", opt.depth, opt.num_classes, "CBAM")
-	model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=opt.num_classes)
+	model = torchvision.models.resnet18(pretrained=True, num_classes=opt.num_classes)
+	# model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=opt.num_classes)
 # 	model = ViT(
 #     image_size = 256,
 #     patch_size = 32,
