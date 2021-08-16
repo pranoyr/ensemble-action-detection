@@ -13,6 +13,12 @@ from vit_pytorch.vit import ViT
 from torch.utils import data
 from torch.utils.data import Subset
 
+
+
+
+import albumentations as A
+from albumentations.pytorch.transforms import ToTensorV2
+
 import argparse
 import tensorboardX
 import os
@@ -34,7 +40,7 @@ class MyLazyDataset(data.Dataset):
 
 	def __getitem__(self, index):
 		if self.transform:
-			x = self.transform(self.dataset[index][0])
+			x = self.transform(image = self.dataset[index][0])["image"]
 		else:
 			x = self.dataset[index][0]
 		y = self.dataset[index][1]
@@ -59,23 +65,41 @@ def main():
 	use_cuda = torch.cuda.is_available()
 	device = torch.device(f"cuda:{opt.gpu}" if use_cuda else "cpu")
 
-	train_transform = transforms.Compose([
-		#transforms.RandomCrop(32, padding=3),
-		transforms.Resize((256, 256)),
-		transforms.RandomHorizontalFlip(0.5),
-		transforms.ColorJitter(brightness=[0.2,1]),
-		GaussianNoise(0.5),
-		# transforms.RandomRotation(10),
-		transforms.ToTensor(),
-		transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[
-			0.229, 0.224, 0.225])
+	# train_transform = transforms.Compose([
+	# 	#transforms.RandomCrop(32, padding=3),
+	# 	transforms.Resize((256, 256)),
+	# 	transforms.RandomHorizontalFlip(0.5),
+	# 	transforms.ColorJitter(brightness=[0.2,1]),
+	# 	GaussianNoise(0.5),
+	# 	# transforms.RandomRotation(10),
+	# 	transforms.ToTensor(),
+	# 	transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[
+	# 		0.229, 0.224, 0.225])
+	# ])
+
+	train_transform = A.Compose([
+	A.Resize(256, 256),
+	A.OneOf([
+	A.HorizontalFlip(p=0.5),
+	# A.VerticalFlip(p=0.5),
+	A.ShiftScaleRotate(shift_limit= 0.2, scale_limit= 0.2, border_mode=0,
+				rotate_limit= 20, value=0, mask_value=0),
+	
+	# A.RandomResizedCrop(scale = [0.9, 1.0], p=1, height=512, width=512),
+	A.GridDropout( holes_number_x=10, holes_number_y=10, ratio=0.4)
+	
+	]),
+	A.normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0, always_apply=True, p=1.0),
+	ToTensorV2(p=1.0)
 	])
-	test_transform = transforms.Compose([
+
+
+
+	test_transform = A.Compose([
 		#transforms.RandomCrop(32, padding=3),
-		transforms.Resize((256, 256)),
-		transforms.ToTensor(),
-		transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[
-			0.229, 0.224, 0.225])
+		A.Resize(256, 256),
+			A.normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0, always_apply=True, p=1.0),
+		ToTensorV2(p=1.0)
 	])
 
 	training_data = torchvision.datasets.ImageFolder(
