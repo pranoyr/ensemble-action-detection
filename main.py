@@ -7,6 +7,7 @@ import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 from torchvision.models import resnet18
 from models.model_resnet import ResidualNet
+from efficientnet_pytorch import EfficientNet
 import argparse
 from transforms import GaussianNoise
 from torch.utils.data import ConcatDataset
@@ -77,7 +78,8 @@ def main():
 	# tensorboard
 	summary_writer = tensorboardX.SummaryWriter(log_dir='tf_logs')
 	# define model
-	model = ResidualNet("ImageNet", opt.depth, opt.num_classes, "CBAM")
+	# model = ResidualNet("ImageNet", opt.depth, opt.num_classes, "CBAM")
+	model = EfficientNet.from_pretrained('efficientnet-b0')
 	if opt.resume_path:
 		checkpoint = torch.load(opt.resume_path)
 		model.load_state_dict(checkpoint['model_state_dict'])

@@ -9,6 +9,7 @@ from torchvision.models import resnet18
 from models.model_resnet import ResidualNet
 import argparse
 import tensorboardX
+from vit_pytorch.vit import ViT
 import cv2
 import os
 import random
@@ -34,18 +35,29 @@ def main():
     use_cuda = torch.cuda.is_available()
     device = torch.device(f"cuda:{opt.gpu}" if use_cuda else "cpu")
 
-    idx_to_class = {0:"Smoking", 1:"Phoning", 2:"Other"}
+    idx_to_class = {0:"Mask", 1:"No Mask"}
    
     transform = transforms.Compose([
         #transforms.RandomCrop(32, padding=3),
-        transforms.Resize((224, 224)),
+        transforms.Resize((256, 256)),
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[
             0.229, 0.224, 0.225])
     ])
 
     # define model
-    model = ResidualNet("ImageNet", opt.depth, opt.num_classes, "CBAM")
+    # model = ResidualNet("ImageNet", opt.depth, opt.num_classes, "CBAM")
+    model = ViT(
+    image_size = 256,
+    patch_size = 32,
+    num_classes = 2,
+    dim = 1024,
+    depth = 6,
+    heads = 8,
+    mlp_dim = 2048,
+    dropout = 0.1,
+    emb_dropout = 0.1
+    )
     checkpoint = torch.load(opt.resume_path, map_location="cpu")
     model.load_state_dict(checkpoint['model_state_dict'])
     model = model.to(device)
